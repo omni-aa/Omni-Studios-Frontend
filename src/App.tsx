@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <div className="font-bold text-xl">
-          Hello World!
+          Hello World
       </div>
         <Navbar/>
     </>
