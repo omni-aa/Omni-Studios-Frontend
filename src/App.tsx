@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <div className="font-bold text-xl">
-          Omni Game Studios !!!!
+          Omni Game Studios
       </div>
         <Navbar/>
     </>
