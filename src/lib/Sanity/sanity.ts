@@ -4,7 +4,7 @@ import {SanityImageType} from "@/Interfaces/Sanity/sanity-image-interface.ts";
 export const client = createClient({
     apiVersion:'2023-05-03',
     dataset:'production',
-    projectId:'q1nusvj5',
+    projectId:'dfq8nkid',
     useCdn:false,
 })
 
