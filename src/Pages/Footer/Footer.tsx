@@ -10,7 +10,7 @@ const Footer = () => {
                     <div>
                         <h2 className="text-2xl font-bold text-white">OmniGameStudios</h2>
                         <p className="text-sm mt-2">
-                            Empowering adventurers with cutting-edge tools and knowledge.
+                            Future of gaming is now. Build the Future of this magical world with us
                         </p>
                         <div className="flex justify-center md:justify-start space-x-4 mt-4">
                             <a href="mailto:contact@auroraproject.com" className="hover:text-white">
