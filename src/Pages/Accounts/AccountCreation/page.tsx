@@ -1,19 +1,19 @@
 import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
 import { Loader, Lock, Mail, User } from "lucide-react";
-import { useState } from "react";
+import {ChangeEvent, FormEvent, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 
 const AccountCreation = () => {
-    const [name, setName] = useState("");
+    const [name, setName] = useState<string>("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
     const { signup, error, isLoading } = useAuthStore();
 
-    const handleSignUp = async (e) => {
+    const handleSignUp = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
@@ -42,21 +42,21 @@ const AccountCreation = () => {
                         type='text'
                         placeholder='Full Name'
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e:ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                     />
                     <Input
                         icon={Mail}
                         type='email'
                         placeholder='Email Address'
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e:ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                     />
                     <Input
                         icon={Lock}
                         type='password'
                         placeholder='Password'
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                     />
                     {error && <p className='text-red-500 font-semibold mt-2'>{error}</p>}
                     <PasswordStrengthMeter password={password} />
