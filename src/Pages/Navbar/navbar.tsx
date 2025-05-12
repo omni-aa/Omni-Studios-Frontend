@@ -15,22 +15,22 @@ const Navbar = () => {
         <>
             <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
                 <header className="sticky top-0 z-50 dark:bg-gradient-to-r  from-gray-900 to-gray-700 shadow-md">
-                    <div className="container mx-auto px-4 flex items-center justify-between py-4">
-                        <Link to="/" className="text-4xl font-bold no-underline text-primary">
+                    <div className="container mx-auto px-4 flex items-center justify-between py-4 bg-gray-800">
+                        <Link to="/" className="text-4xl font-bold no-underline text-white bg-primary border-8 px-1 border-primary">
                             Omni Game Studios
                         </Link>
 
                         <nav className="hidden md:flex items-center space-x-6 ml-auto">
                             <NavLink to="/" className={({ isActive }) => cn(
-                                'flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 px-6 py-3 rounded-lg transition-all',
+                                'flex items-center gap-2 hover:bg-purple-500 dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all bg-primary',
                                 isActive ? 'font-medium' : 'font-normal'
                             )}>
-                                <span className={"text-primary font-bold text-2xl"}>HOME</span>
+                                <span className={"text-white dark:text-white font-bold text-2xl"}>HOME</span>
                             </NavLink>
 
                             <RadixMenu.Root>
-                                <RadixMenu.Trigger className="flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 px-6 py-3 rounded-lg transition-all">
-                                    <span className={"text-primary font-bold text-2xl"}>GAME LIST</span>
+                                <RadixMenu.Trigger className="flex items-center gap-2 hover:bg-primary dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all bg-primary">
+                                    <span className={"text-white dark:text-white font-bold text-2xl"}>GAME LIST</span>
                                 </RadixMenu.Trigger>
                                 <RadixMenu.Portal>
                                     <RadixMenu.Content className="bg-white dark:bg-gray-800 rounded-md shadow-lg p-2 w-56 z-50 transition-transform max-h-96 overflow-y-auto">
@@ -62,16 +62,16 @@ const Navbar = () => {
                                 </RadixMenu.Portal>
                             </RadixMenu.Root>
                             <NavLink to="/support" className={({ isActive }) => cn(
-                                'flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 px-6 py-3 rounded-lg transition-all',
+                                'flex items-center gap-2 bg-primary hover:bg-purple-500 dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all dark:bg-primary',
                                 isActive ? 'font-medium' : 'font-normal'
                             )}>
-                                <span className={"text-primary font-bold text-2xl"}>SUPPORT</span>
+                                <span className={"text-white dark:text-white font-bold text-2xl "}>SUPPORT</span>
                             </NavLink>
                             <NavLink to="/" className={({ isActive }) => cn(
-                                'flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 px-6 py-3 rounded-lg transition-all',
+                                'flex items-center gap-2 bg-primary hover:bg-purple-500 dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all dark:bg-primary',
                                 isActive ? 'font-medium' : 'font-normal'
                             )}>
-                                <span className={"text-primary font-bold text-2xl"}>Q&A</span>
+                                <span className={"dark:text-white text-white font-bold text-2xl"}>Q&A</span>
                             </NavLink>
                             <SignInButton/>
 
