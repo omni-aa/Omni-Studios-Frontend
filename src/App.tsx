@@ -6,7 +6,6 @@ import Navbar from "@/Pages/Navbar/navbar.tsx";
 import GameDirectory from "@/Pages/Games/page.tsx";
 import EchoesOfAzeroth from "@/Pages/Games/Echoes of Azeroth/page.tsx";
 import ArcheRageRemastered from "@/Pages/Games/ArcheRage Remastered/page.tsx";
-import DeadZone from "@/Pages/Games/DeadZone/page.tsx";
 import LoginPage from "@/Pages/Accounts/Login/page.tsx";
 import AccountCreation from "@/Pages/Accounts/AccountCreation/page.tsx";
 import AccountOTPVerification from "@/Pages/Accounts/AccountOTPVerification/page.tsx";
@@ -26,7 +25,6 @@ const router = createBrowserRouter(
             <Route path="/games" element={<GameDirectory/>}/>
             <Route path="/games/echoes-of-azeroth" element={<EchoesOfAzeroth/>}/>
             <Route path="/games/archerage-remastered" element={<ArcheRageRemastered/>}/>
-            <Route path="/games/dead-zone" element={<DeadZone/>}/>
 
 
             / Login & Account Creation Routes
