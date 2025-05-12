@@ -1,7 +1,9 @@
+import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
 import { Loader, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 
 const AccountCreation = () => {
     const [name, setName] = useState("");
