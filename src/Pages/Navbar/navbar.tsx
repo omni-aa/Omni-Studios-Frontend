@@ -39,7 +39,7 @@ const Navbar = () => {
                                                 to="/games/archerage-remastered"
                                                 className="block px-4 py-2 rounded-md text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold"
                                             >
-                                                ArcheRage Remastered
+                                                ArcheHaven
                                             </Link>
                                         </RadixMenu.Item>
                                         <RadixMenu.Item asChild>
@@ -48,14 +48,6 @@ const Navbar = () => {
                                                 className="block px-4 py-2 rounded-md text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold"
                                             >
                                                 Echoes of Azeroth
-                                            </Link>
-                                        </RadixMenu.Item>
-                                        <RadixMenu.Item asChild>
-                                            <Link
-                                                to="/games/dead-zone"
-                                                className="block px-4 py-2 rounded-md text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold"
-                                            >
-                                                Dead Zone
                                             </Link>
                                         </RadixMenu.Item>
                                     </RadixMenu.Content>
