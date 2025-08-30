@@ -1,95 +1,246 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink, Outlet, ScrollRestoration } from 'react-router-dom';
 import * as RadixMenu from '@radix-ui/react-dropdown-menu';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from '@/Components/Misc/ModeToggle.tsx';
 import Footer from '@/Pages/Footer/Footer.tsx';
-import {SignInButton} from "@/Components/ui/AceternityUI/tailwindcss-buttons.tsx";
+import { SignInButton } from '@/Components/ui/AceternityUI/tailwindcss-buttons.tsx';
 
-const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+interface NavItem {
+    to: string;
+    label: string;
+    subItems?: NavItem[];
+}
 
-    const closeMenu = () => setIsOpen(false);
+const Navbar = ({
+                    logoText = 'MySite',
+                    navItems = [
+                        { to: '/', label: 'Home' },
+                        {
+                            to: '#',
+                            label: 'Services',
+                            subItems: [
+                                { to: '/services/design', label: 'Design' },
+                                { to: '/services/development', label: 'Development' },
+                            ],
+                        },
+                        { to: '/about', label: 'About' },
+                        { to: '/contact', label: 'Contact' },
+                        { to: '/account/dashboard', label: 'Dashboard' },
+
+                    ],
+                }: {
+    logoText?: string;
+    navItems?: NavItem[];
+}) => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileMenuOpen]);
+
+    const closeMobileMenu = () => setMobileMenuOpen(false);
+
+    // Render single nav link or dropdown
+    const renderNavItem = (item: NavItem, isMobile = false) => {
+        if (!item.subItems) {
+            return (
+                <NavLink
+                    key={item.to}
+                    to={item.to}
+                    onClick={isMobile ? closeMobileMenu : undefined}
+                    className={({ isActive }) =>
+                        cn(
+                            'block px-3 py-2 rounded-md transition-colors whitespace-nowrap',
+                            isActive
+                                ? 'text-purple-600 dark:text-purple-400 font-bold'
+                                : 'hover:text-purple-600 dark:hover:text-purple-400'
+                        )
+                    }
+                >
+                    {item.label}
+                </NavLink>
+            );
+        }
+
+        // Dropdown menu
+        if (isMobile) {
+            // Mobile: use <details> for accordion style
+            return (
+                <details key={item.label} className="group">
+                    <summary className="flex cursor-pointer items-center justify-between rounded-md px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        {item.label}
+                        <svg
+                            className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            aria-hidden="true"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </summary>
+                    <div className="mt-1 flex flex-col space-y-1 pl-4">
+                        {item.subItems.map((sub) => renderNavItem(sub, true))}
+                    </div>
+                </details>
+            );
+        }
+
+        // Desktop: Radix dropdown menu
+        return (
+            <RadixMenu.Root key={item.label}>
+                <RadixMenu.Trigger
+                    className="relative px-3 py-2 rounded-md cursor-pointer select-none inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors whitespace-nowrap"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+                    {item.label}
+                    <svg
+                        className="ml-1 h-3 w-3 sm:h-4 sm:w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.292l3.71-4.06a.75.75 0 011.08 1.04l-4.25 4.65a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </RadixMenu.Trigger>
+
+                <RadixMenu.Portal>
+                    <RadixMenu.Content
+                        sideOffset={5}
+                        align="start"
+                        className="mt-1 min-w-[12rem] max-w-[18rem] rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-3"
+                    >
+                        {item.subItems.map((sub) => (
+                            <RadixMenu.Item key={sub.to} asChild>
+                                <Link
+                                    to={sub.to}
+                                    className="block px-3 py-2 text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition rounded"
+                                >
+                                    {sub.label}
+                                </Link>
+                            </RadixMenu.Item>
+                        ))}
+                    </RadixMenu.Content>
+                </RadixMenu.Portal>
+            </RadixMenu.Root>
+        );
+    };
 
     return (
         <>
             <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-                <header className="sticky top-0 z-50 dark:bg-gradient-to-r  from-gray-900 to-gray-700 shadow-md">
-                    <div className="container mx-auto px-4 flex items-center justify-between py-4 bg-gray-800">
-                        <Link to="/" className="text-4xl font-bold no-underline text-white bg-primary border-8 px-1 border-primary">
-                            Omni Game Studios
+                <header className="sticky top-0 z-50 backdrop-blur-sm bg-white/70 dark:bg-gray-900/70 border-b border-gray-200 dark:border-gray-800 shadow-md">
+                    <div className="container mx-auto flex flex-wrap items-center justify-between px-4 py-3 md:py-4">
+                        {/* Logo */}
+                        <Link
+                            to="/"
+                            className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-purple-600 dark:text-purple-400 no-underline"
+                            aria-label={`${logoText} homepage`}
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            {logoText}
                         </Link>
 
-                        <nav className="hidden md:flex items-center space-x-6 ml-auto">
-                            <NavLink to="/" className={({ isActive }) => cn(
-                                'flex items-center gap-2 hover:bg-purple-500 dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all bg-primary',
-                                isActive ? 'font-medium' : 'font-normal'
-                            )}>
-                                <span className={"text-white dark:text-white font-bold text-2xl"}>HOME</span>
-                            </NavLink>
-
-                            <RadixMenu.Root>
-                                <RadixMenu.Trigger className="flex items-center gap-2 hover:bg-primary dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all bg-primary">
-                                    <span className={"text-white dark:text-white font-bold text-2xl"}>GAME LIST</span>
-                                </RadixMenu.Trigger>
-                                <RadixMenu.Portal>
-                                    <RadixMenu.Content className="bg-white dark:bg-gray-800 rounded-md shadow-lg p-2 w-56 z-50 transition-transform max-h-96 overflow-y-auto">
-                                        <RadixMenu.Item asChild>
-                                            <Link
-                                                to="/games/archerage-remastered"
-                                                className="block px-4 py-2 rounded-md text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold"
-                                            >
-                                                ArcheHaven
-                                            </Link>
-                                        </RadixMenu.Item>
-                                        <RadixMenu.Item asChild>
-                                            <Link
-                                                to="/games/echoes-of-azeroth"
-                                                className="block px-4 py-2 rounded-md text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-bold"
-                                            >
-                                                Echoes of Azeroth
-                                            </Link>
-                                        </RadixMenu.Item>
-                                    </RadixMenu.Content>
-                                </RadixMenu.Portal>
-                            </RadixMenu.Root>
-                            <NavLink to="/support" className={({ isActive }) => cn(
-                                'flex items-center gap-2 bg-primary hover:bg-purple-500 dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all dark:bg-primary',
-                                isActive ? 'font-medium' : 'font-normal'
-                            )}>
-                                <span className={"text-white dark:text-white font-bold text-2xl "}>SUPPORT</span>
-                            </NavLink>
-                            <NavLink to="/" className={({ isActive }) => cn(
-                                'flex items-center gap-2 bg-primary hover:bg-purple-500 dark:hover:bg-purple-500 px-6 py-3 rounded-lg transition-all dark:bg-primary',
-                                isActive ? 'font-medium' : 'font-normal'
-                            )}>
-                                <span className={"dark:text-white text-white font-bold text-2xl"}>Q&A</span>
-                            </NavLink>
-                            <SignInButton/>
-
+                        {/* Desktop nav */}
+                        <nav
+                            aria-label="Primary Navigation"
+                            className="hidden md:flex flex-wrap items-center space-x-6 lg:space-x-8 font-semibold text-gray-700 dark:text-gray-300 max-w-full overflow-x-auto"
+                            style={{ WebkitOverflowScrolling: 'touch' }}
+                        >
+                            {navItems.map((item) => renderNavItem(item))}
+                            <div className="pl-2">
+                                <SignInButton />
+                            </div>
                         </nav>
 
-                        <button className="block md:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" onClick={() => setIsOpen(!isOpen)}>
-                            <svg className={cn('h-6 w-6 transition-transform', isOpen ? 'rotate-90' : '')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path fillRule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zm0 6a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zm0 6a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clipRule="evenodd" />
+                        {/* Mobile hamburger */}
+                        <button
+                            onClick={() => setMobileMenuOpen(true)}
+                            aria-label="Open menu"
+                            aria-expanded={mobileMenuOpen}
+                            aria-controls="mobile-menu"
+                            className="md:hidden p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        >
+                            <svg
+                                className="h-6 w-6"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                aria-hidden="true"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
                 </header>
 
-                {isOpen && (
-                    <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 py-6">
-                        <ul className="space-y-4">
-                            <li>
-                                <NavLink to="/" onClick={closeMenu} className="block px-6 py-3 rounded-lg transition-all hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    Home
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </div>
-                )}
+                {/* Mobile Drawer Menu */}
+                <div
+                    className={cn(
+                        'fixed inset-0 z-50 transform bg-white dark:bg-gray-900 transition-transform duration-300 ease-in-out md:hidden shadow-lg',
+                        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+                    )}
+                    role="dialog"
+                    aria-modal="true"
+                    id="mobile-menu"
+                >
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <Link
+                            to="/"
+                            onClick={closeMobileMenu}
+                            className="text-2xl font-extrabold text-purple-600 dark:text-purple-400 no-underline"
+                        >
+                            {logoText}
+                        </Link>
+                        <button
+                            onClick={closeMobileMenu}
+                            aria-label="Close menu"
+                            className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        >
+                            <svg
+                                className="h-6 w-6"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                aria-hidden="true"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
 
-                <main className="flex-grow container mx-auto px-4 py-4">
+                    </div>
+
+                    <nav
+                        className="flex flex-col px-5 py-6 space-y-6 text-lg font-semibold text-gray-700 dark:text-gray-300"
+                        aria-label="Mobile Primary Navigation"
+
+                    >
+                        {navItems.map((item) => renderNavItem(item, true))}
+                        <div>
+                            <SignInButton />
+                        </div>
+
+                    </nav>
+                </div>
+
+                {/* Main Content */}
+                <main className="flex-grow container mx-auto px-4 py-6">
                     <Outlet />
                 </main>
 
@@ -97,6 +248,7 @@ const Navbar = () => {
                     <ModeToggle />
                 </div>
             </div>
+
             <Footer />
             <ScrollRestoration />
         </>
