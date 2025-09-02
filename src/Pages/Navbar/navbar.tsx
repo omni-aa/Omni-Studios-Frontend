@@ -13,7 +13,7 @@ interface NavItem {
 }
 
 const Navbar = ({
-                    logoText = 'MySite',
+                    logoText = 'Novus Studios',
                     navItems = [
                         { to: '/', label: 'Home' },
                         {
